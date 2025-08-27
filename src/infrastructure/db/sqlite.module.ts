@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { drizzle } from 'drizzle-orm/libsql';
 
-const DB_PROVIDER_NAME = 'DB';
+const DB_PROVIDER_NAME = Symbol('DB');
 const db = drizzle(process.env.DB_FILE_NAME!);
 
 @Module({

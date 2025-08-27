@@ -76,4 +76,13 @@ export class ErrorFactory {
             metadata,
         );
     }
+
+    newUnknown(message: string, metadata?: Record<string, any>) {
+        return new DomainError(
+            ErrorType.ErrUnknown,
+            'An unknown error occurred',
+            message,
+            metadata,
+        );
+    }
 }
