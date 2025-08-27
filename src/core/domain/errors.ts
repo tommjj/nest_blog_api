@@ -14,7 +14,7 @@ export class DomainError extends Error {
         privateMessage?: string,
         metadata?: Record<string, any>,
     ) {
-        super(privateMessage || publicMessage);
+        super(publicMessage);
         this.name = 'DomainError';
 
         this.type = type;
