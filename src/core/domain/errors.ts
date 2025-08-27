@@ -57,3 +57,23 @@ export enum ErrorType {
     ErrUnauthorized = 'Unauthorized',
     ErrUnknown = 'Unknown',
 }
+
+export class ErrorFactory {
+    newDataExists(message: string, metadata?: Record<string, any>) {
+        return new DomainError(
+            ErrorType.ErrDataExists,
+            message,
+            message,
+            metadata,
+        );
+    }
+
+    newInternal(message: string, metadata?: Record<string, any>) {
+        return new DomainError(
+            ErrorType.ErrInternal,
+            'An internal error occurred',
+            message,
+            metadata,
+        );
+    }
+}
