@@ -1,16 +1,23 @@
 import { sql, relations } from 'drizzle-orm';
 import { int, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
+const timestamp = {
+    createdAt: text('created_at')
+        .notNull()
+        .default(sql`(datetime('now'))`),
+    updatedAt: text('updated_at')
+        .notNull()
+        .default(sql`(datetime('now'))`)
+        .$onUpdate(() => sql`(datetime('now'))`),
+};
+
 export const users = sqliteTable('users', {
     id: int('id').primaryKey({ autoIncrement: true }),
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
     password: text('password').notNull(),
 
-    createdAt: text('created_at').default(sql`(datetime('now'))`),
-    updatedAt: text('updated_at')
-        .default(sql`(datetime('now'))`)
-        .$onUpdate(() => sql`(datetime('now'))`),
+    ...timestamp,
 });
 
 export const posts = sqliteTable('posts', {
@@ -21,12 +28,19 @@ export const posts = sqliteTable('posts', {
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
 
-    createdAt: text('created_at').default(sql`(datetime('now'))`),
-    updatedAt: text('updated_at')
-        .default(sql`(datetime('now'))`)
-        .$onUpdate(() => sql`(datetime('now'))`),
+    ...timestamp,
 });
 
+/**
+ * comments table
+ * Schema:
+ * - id: primary key
+ * - content: text
+ * - postId: foreign key to posts table
+ * - authorId: foreign key to users table
+ * - createdAt: timestamp
+ * - updatedAt: timestamp
+ */
 export const comments = sqliteTable('comments', {
     id: int('id').primaryKey({ autoIncrement: true }),
     content: text('content').notNull(),
@@ -37,10 +51,7 @@ export const comments = sqliteTable('comments', {
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
 
-    createdAt: text('created_at').default(sql`(datetime('now'))`),
-    updatedAt: text('updated_at')
-        .default(sql`(datetime('now'))`)
-        .$onUpdate(() => sql`(datetime('now'))`),
+    ...timestamp,
 });
 
 // Define relations for posts

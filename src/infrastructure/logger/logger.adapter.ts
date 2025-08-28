@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import pino from 'pino';
-import { ILoggerPort } from 'src/core/port/logger';
+import { ILoggerPort } from 'src/core/port/logger.port';
 
 function newLogger(level: string = 'info'): pino.Logger {
     return pino({

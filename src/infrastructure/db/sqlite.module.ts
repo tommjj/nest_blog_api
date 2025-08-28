@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
+import * as schema from './schema';
 import { drizzle } from 'drizzle-orm/libsql';
 
-const DB_PROVIDER_NAME = Symbol('DB');
-const db = drizzle(process.env.DB_FILE_NAME!);
+export const DB_PROVIDER_NAME = Symbol('DB');
+
+const db = drizzle(process.env.DB_FILE_NAME!, {
+    schema,
+});
+export type SQLiteDB = typeof db;
 
 @Module({
     providers: [
@@ -13,4 +18,4 @@ const db = drizzle(process.env.DB_FILE_NAME!);
     ],
     exports: [DB_PROVIDER_NAME],
 })
-export class SQLiteModule {}
+export class SqliteModule {}
