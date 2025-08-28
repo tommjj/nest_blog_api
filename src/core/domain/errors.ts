@@ -65,9 +65,6 @@ export enum ErrorType {
 /**
  * ErrorFactory is a helper to create DomainError instances
  */
-/**
- * ErrorFactory is a helper to create DomainError instances
- */
 class ErrorFactory {
     constructor() {}
 
