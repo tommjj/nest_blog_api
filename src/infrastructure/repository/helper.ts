@@ -1,13 +1,22 @@
 import { errors } from '../../core/domain/errors';
 
 export function handleInsertError(err: unknown): never {
-    if (err instanceof Error && 'rawCode' in err) {
-        const e = err as { rawCode: number; message: string };
+    if (
+        err instanceof Error &&
+        err.cause instanceof Error &&
+        'rawCode' in err.cause
+    ) {
+        const e = err.cause as { rawCode: number; message: string };
 
         switch (e.rawCode) {
             case 1555: // SQLite constraint: UNIQUE constraint failed
-                throw errors.newDataExists(e.message, { rawCode: e.rawCode });
-
+                throw errors.newDataExists(e.message, {
+                    rawCode: e.rawCode,
+                });
+            case 2067: // SQLITE_CONSTRAINT_UNIQUE
+                throw errors.newDataConflicting(e.message, {
+                    rawCode: e.rawCode,
+                });
             case 275: // SQLite constraint: CHECK constraint failed
                 throw errors.newInvalidData(e.message, { rawCode: e.rawCode });
 
@@ -27,8 +36,12 @@ export function handleInsertError(err: unknown): never {
     throw errors.newUnknown('Unknown error', undefined, err);
 }
 export function handleUpdateError(err: unknown): never {
-    if (err instanceof Error && 'rawCode' in err) {
-        const e = err as { rawCode: number; message: string };
+    if (
+        err instanceof Error &&
+        err.cause instanceof Error &&
+        'rawCode' in err.cause
+    ) {
+        const e = err.cause as { rawCode: number; message: string };
 
         switch (e.rawCode) {
             case 275: // SQLite CHECK constraint failed
@@ -54,8 +67,12 @@ export function handleUpdateError(err: unknown): never {
  * handleDeleteError converts raw DB errors into DomainError
  */
 export function handleDeleteError(err: unknown): never {
-    if (err instanceof Error && 'rawCode' in err) {
-        const e = err as { rawCode: number; message: string };
+    if (
+        err instanceof Error &&
+        err.cause instanceof Error &&
+        'rawCode' in err.cause
+    ) {
+        const e = err.cause as { rawCode: number; message: string };
         throw errors.newDatabase(e.message, { rawCode: e.rawCode }, err);
     }
 
@@ -70,8 +87,12 @@ export function handleDeleteError(err: unknown): never {
  * handleFindError converts raw DB errors into DomainError
  */
 export function handleFindError(err: unknown): never {
-    if (err instanceof Error && 'rawCode' in err) {
-        const e = err as { rawCode: number; message: string };
+    if (
+        err instanceof Error &&
+        err.cause instanceof Error &&
+        'rawCode' in err.cause
+    ) {
+        const e = err.cause as { rawCode: number; message: string };
         throw errors.newDatabase(e.message, { rawCode: e.rawCode }, err);
     }
 
