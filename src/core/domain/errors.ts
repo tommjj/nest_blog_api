@@ -1,49 +1,4 @@
 /**
- * DomainError is a custom error class for domain layer
- */
-export class DomainError extends Error {
-    public readonly publicMessage: string;
-    public readonly privateMessage: string;
-    public readonly type: ErrorType;
-
-    public readonly metadata?: Record<string, any>;
-
-    constructor(
-        type: ErrorType,
-        publicMessage: string,
-        options: {
-            cause?: unknown;
-            privateMessage?: string;
-            metadata?: Record<string, any>;
-        },
-    ) {
-        super(publicMessage);
-        this.name = 'DomainError';
-        this.type = type;
-        this.publicMessage = publicMessage;
-
-        this.cause = options.cause;
-        this.privateMessage = options.privateMessage || publicMessage;
-        this.metadata = options.metadata;
-    }
-
-    toString() {
-        return `${this.type}: ${this.privateMessage}`;
-    }
-
-    toPublicString() {
-        return `${this.type}: ${this.publicMessage}`;
-    }
-
-    is(type: ErrorType | DomainError) {
-        if (type instanceof DomainError) {
-            return this.type === type.type;
-        }
-        return this.type === type;
-    }
-}
-
-/**
  * ErrorType is an enumeration of error types
  */
 export enum ErrorType {
@@ -60,146 +15,199 @@ export enum ErrorType {
     ErrDatabase = 'Database',
     ErrUnauthorized = 'Unauthorized',
     ErrUnknown = 'Unknown',
+
+    // Token Errors
+    ErrTokenMissing = 'TokenMissing',
+    ErrTokenExpired = 'TokenExpired',
+    ErrTokenInvalid = 'TokenInvalid',
 }
 
 /**
- * ErrorFactory is a helper to create DomainError instances
+ * DomainError is a custom error class for domain layer
  */
-class ErrorFactory {
-    constructor() {}
+export class DomainError extends Error {
+    public readonly publicMessage: string;
+    public readonly privateMessage: string;
 
-    newDataExists(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(ErrorType.ErrDataExists, 'Data already exists', {
-            privateMessage,
-            metadata,
-        });
-    }
+    public readonly type: ErrorType;
 
-    newInternal(
-        privateMessage: string,
-        metadata?: Record<string, any>,
-        cause?: unknown,
+    public readonly metadata?: Record<string, any>;
+
+    constructor(
+        type: ErrorType,
+        publicMessage: string,
+        options: {
+            cause?: unknown;
+            privateMessage?: string;
+            metadata?: Record<string, any>;
+        },
     ) {
-        return new DomainError(
-            ErrorType.ErrInternal,
-            'An internal error occurred',
-            {
-                privateMessage,
-                metadata,
-                cause,
-            },
-        );
+        super(publicMessage, { cause: options.cause });
+        this.name = 'DomainError';
+        this.type = type;
+        this.publicMessage = publicMessage;
+
+        this.privateMessage = options.privateMessage || publicMessage;
+        this.metadata = options.metadata;
     }
 
-    newInvalidData(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(
-            ErrorType.ErrInvalidData,
-            'Invalid data provided',
-            {
-                privateMessage,
-                metadata,
-            },
-        );
+    toString() {
+        return `${this.type}: ${this.privateMessage}`;
     }
 
-    newDataConflicting(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(
-            ErrorType.ErrDataConflicting,
-            'Data conflict detected',
-            {
-                privateMessage,
-                metadata,
-            },
-        );
+    toPublicString() {
+        return `${this.type}: ${this.publicMessage}`;
     }
 
-    newDataVersionConflict(
-        privateMessage: string,
-        metadata?: Record<string, any>,
-    ) {
-        return new DomainError(
-            ErrorType.ErrDataVersionConflict,
-            'Data version conflict',
-            {
-                privateMessage,
-                metadata,
-            },
-        );
+    toJSON() {
+        return {
+            name: this.name,
+            type: this.type,
+            publicMessage: this.publicMessage,
+            privateMessage: this.privateMessage,
+            metadata: this.metadata,
+        };
     }
 
-    newNotFound(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(ErrorType.ErrNotFound, 'Resource not found', {
-            privateMessage,
-            metadata,
-        });
-    }
-
-    newNoDataUpdated(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(
-            ErrorType.ErrNoDataUpdated,
-            'No data was updated',
-            {
-                privateMessage,
-                metadata,
-            },
-        );
-    }
-
-    newForbidden(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(ErrorType.ErrForBidden, 'Forbidden action', {
-            privateMessage,
-            metadata,
-        });
-    }
-
-    newValidation(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(ErrorType.ErrValidation, 'Validation failed', {
-            privateMessage,
-            metadata,
-        });
-    }
-
-    newDatabase(
-        privateMessage: string,
-        metadata?: Record<string, any>,
-        cause?: unknown,
-    ) {
-        return new DomainError(ErrorType.ErrDatabase, 'Database error', {
-            privateMessage,
-            metadata,
-            cause,
-        });
-    }
-
-    newUnauthorized(privateMessage: string, metadata?: Record<string, any>) {
-        return new DomainError(
-            ErrorType.ErrUnauthorized,
-            'Unauthorized access',
-            {
-                privateMessage,
-                metadata,
-            },
-        );
-    }
-
-    newUnknown(
-        privateMessage: string,
-        metadata?: Record<string, any>,
-        cause?: unknown,
-    ) {
-        return new DomainError(
-            ErrorType.ErrUnknown,
-            'An unknown error occurred',
-            {
-                privateMessage,
-                metadata,
-                cause,
-            },
-        );
+    is(type: ErrorType | DomainError) {
+        if (type instanceof DomainError) {
+            return this.type === type.type;
+        }
+        return this.type === type;
     }
 }
 
-/**
- * errors is a ErrorFactory
- */
-export const errors = new ErrorFactory();
+type NewErrorFunc<T extends ErrorType> = {
+    [K in T]: (
+        msg?: string,
+        metadata?: Record<string, any>,
+        cause?: unknown,
+    ) => DomainError;
+};
+
+type ThrowErrorFunc<T extends ErrorType> = {
+    [K in T]: (
+        msg?: string,
+        metadata?: Record<string, any>,
+        cause?: unknown,
+    ) => never;
+};
+
+export function createErrors<T extends { type: ErrorType; pMgs: string }>(
+    O: T[],
+): NewErrorFunc<T['type']> {
+    return O.reduce(
+        (fac, item) => {
+            fac[item.type] = (
+                msg?: string,
+                metadata?: Record<string, any>,
+                cause?: unknown,
+            ) =>
+                new DomainError(item.type, item.pMgs, {
+                    privateMessage: msg,
+                    metadata,
+                    cause,
+                });
+            return fac;
+        },
+        {} as NewErrorFunc<T['type']>,
+    );
+}
+
+export function createThrowErrors<T extends { type: ErrorType; pMgs: string }>(
+    O: T[],
+): ThrowErrorFunc<T['type']> {
+    return O.reduce(
+        (fac, item) => {
+            fac[item.type] = (
+                msg?: string,
+                metadata?: Record<string, any>,
+                cause?: unknown,
+            ) => {
+                throw new DomainError(item.type, item.pMgs, {
+                    privateMessage: msg,
+                    metadata,
+                    cause,
+                });
+            };
+            return fac;
+        },
+        {} as ThrowErrorFunc<T['type']>,
+    );
+}
+
+const errorConfigs = [
+    // General Errors
+    {
+        type: ErrorType.ErrDataExists,
+        pMgs: 'Data already exists',
+    },
+    {
+        type: ErrorType.ErrInternal,
+        pMgs: 'An internal error occurred',
+    },
+    {
+        type: ErrorType.ErrInvalidData,
+        pMgs: 'Invalid data provided',
+    },
+    {
+        type: ErrorType.ErrDataConflicting,
+        pMgs: 'Data conflict detected',
+    },
+    {
+        type: ErrorType.ErrDataVersionConflict,
+        pMgs: 'Data version conflict',
+    },
+    {
+        type: ErrorType.ErrNotFound,
+        pMgs: 'Resource not found',
+    },
+    {
+        type: ErrorType.ErrNoDataUpdated,
+        pMgs: 'No data was updated',
+    },
+    {
+        type: ErrorType.ErrForBidden,
+        pMgs: 'Forbidden action',
+    },
+    {
+        type: ErrorType.ErrValidation,
+        pMgs: 'Validation failed',
+    },
+    {
+        type: ErrorType.ErrDatabase,
+        pMgs: 'Database error',
+    },
+    {
+        type: ErrorType.ErrUnauthorized,
+        pMgs: 'Unauthorized access',
+    },
+    {
+        type: ErrorType.ErrUnknown,
+        pMgs: 'An unknown error occurred',
+    },
+
+    // Token Errors
+    {
+        type: ErrorType.ErrTokenMissing,
+        pMgs: 'Token missing',
+    },
+    {
+        type: ErrorType.ErrTokenExpired,
+        pMgs: 'Token has expired',
+    },
+    {
+        type: ErrorType.ErrTokenInvalid,
+        pMgs: 'Invalid token',
+    },
+];
+
+const errorFuncs = createErrors(errorConfigs);
+const throwErrorFuncs = createThrowErrors(errorConfigs);
+
+export const errors = {
+    ...errorFuncs,
+    t: {
+        ...throwErrorFuncs,
+    },
+};

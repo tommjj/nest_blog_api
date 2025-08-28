@@ -10,30 +10,26 @@ export function handleInsertError(err: unknown): never {
 
         switch (e.rawCode) {
             case 1555: // SQLite constraint: UNIQUE constraint failed
-                throw errors.newDataExists(e.message, {
+                throw errors.DataExists(e.message, {
                     rawCode: e.rawCode,
                 });
             case 2067: // SQLITE_CONSTRAINT_UNIQUE
-                throw errors.newDataConflicting(e.message, {
+                throw errors.DataConflicting(e.message, {
                     rawCode: e.rawCode,
                 });
             case 275: // SQLite constraint: CHECK constraint failed
-                throw errors.newInvalidData(e.message, { rawCode: e.rawCode });
+                throw errors.InvalidData(e.message, { rawCode: e.rawCode });
 
             default:
-                throw errors.newDatabase(
-                    e.message,
-                    { rawCode: e.rawCode },
-                    err,
-                );
+                throw errors.Database(e.message, { rawCode: e.rawCode }, err);
         }
     }
 
     if (err instanceof Error) {
-        throw errors.newInternal(err.message, undefined, err);
+        throw errors.Internal(err.message, undefined, err);
     }
 
-    throw errors.newUnknown('Unknown error', undefined, err);
+    throw errors.Unknown('Unknown error', undefined, err);
 }
 export function handleUpdateError(err: unknown): never {
     if (
@@ -45,22 +41,18 @@ export function handleUpdateError(err: unknown): never {
 
         switch (e.rawCode) {
             case 275: // SQLite CHECK constraint failed
-                throw errors.newInvalidData(e.message, { rawCode: e.rawCode });
+                throw errors.InvalidData(e.message, { rawCode: e.rawCode });
 
             default:
-                throw errors.newDatabase(
-                    e.message,
-                    { rawCode: e.rawCode },
-                    err,
-                );
+                throw errors.Database(e.message, { rawCode: e.rawCode }, err);
         }
     }
 
     if (err instanceof Error) {
-        throw errors.newInternal(err.message, undefined, err);
+        throw errors.Internal(err.message, undefined, err);
     }
 
-    throw errors.newUnknown('Unknown error', undefined, err);
+    throw errors.Unknown('Unknown error', undefined, err);
 }
 
 /**
@@ -73,14 +65,14 @@ export function handleDeleteError(err: unknown): never {
         'rawCode' in err.cause
     ) {
         const e = err.cause as { rawCode: number; message: string };
-        throw errors.newDatabase(e.message, { rawCode: e.rawCode }, err);
+        throw errors.Database(e.message, { rawCode: e.rawCode }, err);
     }
 
     if (err instanceof Error) {
-        throw errors.newInternal(err.message, undefined, err);
+        throw errors.Internal(err.message, undefined, err);
     }
 
-    throw errors.newUnknown('Unknown error', undefined, err);
+    throw errors.Unknown('Unknown error', undefined, err);
 }
 
 /**
@@ -93,14 +85,14 @@ export function handleFindError(err: unknown): never {
         'rawCode' in err.cause
     ) {
         const e = err.cause as { rawCode: number; message: string };
-        throw errors.newDatabase(e.message, { rawCode: e.rawCode }, err);
+        throw errors.Database(e.message, { rawCode: e.rawCode }, err);
     }
 
     if (err instanceof Error) {
-        throw errors.newInternal(err.message, undefined, err);
+        throw errors.Internal(err.message, undefined, err);
     }
 
-    throw errors.newUnknown('Unknown error', undefined, err);
+    throw errors.Unknown('Unknown error', undefined, err);
 }
 
 export function omit<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {

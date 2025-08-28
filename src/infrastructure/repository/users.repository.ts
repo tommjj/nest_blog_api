@@ -56,7 +56,7 @@ export class UsersRepository implements IUsersRepository {
             handleFindError(result.error);
         }
         if (result.data.length === 0) {
-            errors.newNotFound('user not found');
+            errors.NotFound('user not found');
         }
 
         return userDto.toUser(result.data[0]);
@@ -73,7 +73,7 @@ export class UsersRepository implements IUsersRepository {
             handleFindError(result.error);
         }
         if (result.data.length === 0) {
-            errors.newNotFound('user not found');
+            errors.NotFound('user not found');
         }
 
         return userDto.toUser(result.data[0]);
@@ -95,7 +95,7 @@ export class UsersRepository implements IUsersRepository {
             handleUpdateError(result.error);
         }
         if (result.data.length === 0) {
-            throw errors.newNotFound(`user with id ${user.id} not found`);
+            throw errors.NotFound(`user with id ${user.id} not found`);
         }
 
         return userDto.toUser(result.data[0]);
@@ -109,7 +109,7 @@ export class UsersRepository implements IUsersRepository {
             handleDeleteError(result.error);
         }
         if (result.data.rowsAffected === 0) {
-            throw errors.newNotFound(`user with id ${id} not found`, {
+            throw errors.NotFound(`user with id ${id} not found`, {
                 service: 'UserService_deleteUser',
             });
         }
