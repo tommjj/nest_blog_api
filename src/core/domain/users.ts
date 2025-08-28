@@ -9,5 +9,4 @@ export type User = {
 
 export type UserWithPassword = User & {
     password: string;
-    isHashed: boolean;
 };
