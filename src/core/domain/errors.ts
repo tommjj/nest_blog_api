@@ -2,6 +2,9 @@
  * ErrorType is an enumeration of error types
  */
 export enum ErrorType {
+    ErrConfigMissing = 'ConfigMissing',
+    ErrConfigInvalid = 'ConfigInvalid',
+
     // General Errors
     ErrDataExists = 'DataExists',
     ErrInternal = 'Internal',
@@ -137,6 +140,15 @@ export function createThrowErrors<T extends { type: ErrorType; pMgs: string }>(
 }
 
 const errorConfigs = [
+    // Config Errors
+    {
+        type: ErrorType.ErrConfigMissing,
+        pMgs: 'Config Missing',
+    },
+    {
+        type: ErrorType.ErrConfigInvalid,
+        pMgs: 'Invalid Config',
+    },
     // General Errors
     {
         type: ErrorType.ErrDataExists,
@@ -207,7 +219,7 @@ const throwErrorFuncs = createThrowErrors(errorConfigs);
 
 export const errors = {
     ...errorFuncs,
-    t: {
+    throw: {
         ...throwErrorFuncs,
     },
-};
+} as const;
