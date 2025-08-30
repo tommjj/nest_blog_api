@@ -6,6 +6,7 @@ export enum ErrorType {
     ErrConfigInvalid = 'ConfigInvalid',
 
     // General Errors
+    ErrInvalidCredentials = 'InvalidCredentials',
     ErrDataExists = 'DataExists',
     ErrInternal = 'Internal',
     ErrInvalidData = 'InvalidData',
@@ -141,6 +142,10 @@ export function createThrowErrors<T extends { type: ErrorType; pMgs: string }>(
 
 const errorConfigs = [
     // Config Errors
+    {
+        type: ErrorType.ErrInvalidCredentials,
+        pMgs: 'User credentials invalid',
+    },
     {
         type: ErrorType.ErrConfigMissing,
         pMgs: 'Config Missing',
