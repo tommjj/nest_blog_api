@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import jwt from 'jsonwebtoken';
 
 import type { ITokenPort } from '../../core/port/auth.port';
-import { TokenPayload } from 'src/core/domain/auth';
-import { ConfigService } from '@nestjs/config';
+import { errors } from '../../core/domain/errors';
+import { TokenPayload } from '../../core/domain/auth';
 import { config } from '../utils/get_config.helper';
-import { errors } from 'src/core/domain/errors';
 import { jwtDto } from './jwt.dto';
 
 @Injectable()
@@ -32,7 +32,11 @@ export class JWTAdapter implements ITokenPort {
 
             return jwtDto.toTokenPayload(payload);
         } catch (err) {
-            throw errors.TokenInvalid('Token is invalid or expired', {}, err);
+            throw errors.TokenInvalid(
+                'Token is invalid or expired',
+                undefined,
+                err,
+            );
         }
     }
 
