@@ -2,7 +2,7 @@ import { IAuthService, IPasswordPort, ITokenPort } from '../port/auth.port';
 import { IUsersRepository } from '../port/users.port';
 
 import { errors } from '../domain/errors';
-import { withError } from 'src/common/helper/withError';
+import { withError } from '../../common/helper/withError';
 
 export default class AuthService implements IAuthService {
     constructor(
