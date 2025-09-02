@@ -1,13 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigModule } from '@nestjs/config';
 
 import { IUsersRepository } from '../../core/port/users.port';
 import { IPasswordPort, ITokenPort } from '../../core/port/auth.port';
-import { RepositoryModule } from '../repository/repository.module';
-import { AuthModule, JWT_PORT, PASSWORD_PORT } from '../auth/auth.module';
 import AuthService from '../../core/services/auth.service';
-import { AUTH_SERVICE } from './auth.provider';
-import { ConfigModule } from '@nestjs/config';
+
+import { RepositoryModule } from '../repository/repository.module';
 import { UsersRepository } from '../repository/users.repository';
+import { AuthModule } from '../auth/auth.module';
+import { AUTH_SERVICE } from './auth.provider';
+import { JWTTokenAdapter } from '../auth/jwt.adapter';
+import { Argon2PasswordAdapter } from '../auth/password.adapter';
 
 describe('AuthService', () => {
     let authService: AuthService;
@@ -36,7 +39,11 @@ describe('AuthService', () => {
                             hashAdapter,
                         );
                     },
-                    inject: [UsersRepository, JWT_PORT, PASSWORD_PORT],
+                    inject: [
+                        UsersRepository,
+                        JWTTokenAdapter,
+                        Argon2PasswordAdapter,
+                    ],
                 },
             ],
         }).compile();

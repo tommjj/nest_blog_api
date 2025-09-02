@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import jwt from 'jsonwebtoken';
@@ -10,11 +10,11 @@ import { config } from '../utils/get_config.helper';
 import { jwtDto } from './dto/jwt.dto';
 
 @Injectable()
-export class JWTAdapter implements ITokenPort {
+export class JWTTokenAdapter implements ITokenPort {
     private secret: string;
     private expiresIn: number;
 
-    constructor(@Inject() private conf: ConfigService) {
+    constructor(private conf: ConfigService) {
         this.secret = config(conf).mustString('AUTH_SECRET');
 
         const expiresIn = config(conf).mustInt('EXPIRES_IN');

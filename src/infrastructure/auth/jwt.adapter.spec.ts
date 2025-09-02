@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 
-import { JWTAdapter } from './jwt.adapter';
+import { JWTTokenAdapter } from './jwt.adapter';
 import { TokenPayload } from '../../core/domain/auth';
 
 describe('JWTAdapter', () => {
-    let jwtAdapter: JWTAdapter;
+    let jwtAdapter: JWTTokenAdapter;
 
     beforeAll(async () => {
         const moduleRef: TestingModule = await Test.createTestingModule({
             providers: [
-                JWTAdapter,
+                JWTTokenAdapter,
                 {
                     provide: ConfigService,
                     useValue: {
@@ -24,7 +24,7 @@ describe('JWTAdapter', () => {
             ],
         }).compile();
 
-        jwtAdapter = moduleRef.get<JWTAdapter>(JWTAdapter);
+        jwtAdapter = moduleRef.get<JWTTokenAdapter>(JWTTokenAdapter);
     });
 
     it('should define', () => {
