@@ -9,4 +9,4 @@ import { usersProvider, USERS_SERVICE } from './users.provider';
     providers: [authProvider, usersProvider],
     exports: [AUTH_SERVICE, USERS_SERVICE],
 })
-export class AuthServiceModule {}
+export class ServiceModule {}

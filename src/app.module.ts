@@ -3,11 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from './infrastructure/logger/logger.module';
+import { HTTPModule } from './interface/http/http.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
         LoggerModule,
+        HTTPModule,
     ],
     controllers: [AppController],
     providers: [AppService],
