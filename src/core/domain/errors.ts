@@ -97,7 +97,7 @@ type ThrowErrorFunc<T extends ErrorType> = {
     ) => never;
 };
 
-export function createErrors<T extends { type: ErrorType; pMgs: string }>(
+export function createErrors<T extends { type: ErrorType; publicMgs: string }>(
     O: T[],
 ): NewErrorFunc<T['type']> {
     return O.reduce(
@@ -107,7 +107,7 @@ export function createErrors<T extends { type: ErrorType; pMgs: string }>(
                 metadata?: Record<string, any>,
                 cause?: unknown,
             ) =>
-                new DomainError(item.type, item.pMgs, {
+                new DomainError(item.type, item.publicMgs, {
                     privateMessage: msg,
                     metadata,
                     cause,
@@ -118,9 +118,9 @@ export function createErrors<T extends { type: ErrorType; pMgs: string }>(
     );
 }
 
-export function createThrowErrors<T extends { type: ErrorType; pMgs: string }>(
-    O: T[],
-): ThrowErrorFunc<T['type']> {
+export function createThrowErrors<
+    T extends { type: ErrorType; publicMgs: string },
+>(O: T[]): ThrowErrorFunc<T['type']> {
     return O.reduce(
         (fac, item) => {
             fac[item.type] = (
@@ -128,7 +128,7 @@ export function createThrowErrors<T extends { type: ErrorType; pMgs: string }>(
                 metadata?: Record<string, any>,
                 cause?: unknown,
             ) => {
-                throw new DomainError(item.type, item.pMgs, {
+                throw new DomainError(item.type, item.publicMgs, {
                     privateMessage: msg,
                     metadata,
                     cause,
@@ -144,78 +144,78 @@ const errorConfigs = [
     // Config Errors
     {
         type: ErrorType.ErrInvalidCredentials,
-        pMgs: 'User credentials invalid',
+        publicMgs: 'User credentials invalid',
     },
     {
         type: ErrorType.ErrConfigMissing,
-        pMgs: 'Config Missing',
+        publicMgs: 'Config Missing',
     },
     {
         type: ErrorType.ErrConfigInvalid,
-        pMgs: 'Invalid Config',
+        publicMgs: 'Invalid Config',
     },
     // General Errors
     {
         type: ErrorType.ErrDataExists,
-        pMgs: 'Data already exists',
+        publicMgs: 'Data already exists',
     },
     {
         type: ErrorType.ErrInternal,
-        pMgs: 'An internal error occurred',
+        publicMgs: 'An internal error occurred',
     },
     {
         type: ErrorType.ErrInvalidData,
-        pMgs: 'Invalid data provided',
+        publicMgs: 'Invalid data provided',
     },
     {
         type: ErrorType.ErrDataConflicting,
-        pMgs: 'Data conflict detected',
+        publicMgs: 'Data conflict detected',
     },
     {
         type: ErrorType.ErrDataVersionConflict,
-        pMgs: 'Data version conflict',
+        publicMgs: 'Data version conflict',
     },
     {
         type: ErrorType.ErrNotFound,
-        pMgs: 'Resource not found',
+        publicMgs: 'Resource not found',
     },
     {
         type: ErrorType.ErrNoDataUpdated,
-        pMgs: 'No data was updated',
+        publicMgs: 'No data was updated',
     },
     {
         type: ErrorType.ErrForBidden,
-        pMgs: 'Forbidden action',
+        publicMgs: 'Forbidden action',
     },
     {
         type: ErrorType.ErrValidation,
-        pMgs: 'Validation failed',
+        publicMgs: 'Validation failed',
     },
     {
         type: ErrorType.ErrDatabase,
-        pMgs: 'Database error',
+        publicMgs: 'Database error',
     },
     {
         type: ErrorType.ErrUnauthorized,
-        pMgs: 'Unauthorized access',
+        publicMgs: 'Unauthorized access',
     },
     {
         type: ErrorType.ErrUnknown,
-        pMgs: 'An unknown error occurred',
+        publicMgs: 'An unknown error occurred',
     },
 
     // Token Errors
     {
         type: ErrorType.ErrTokenMissing,
-        pMgs: 'Token missing',
+        publicMgs: 'Token missing',
     },
     {
         type: ErrorType.ErrTokenExpired,
-        pMgs: 'Token has expired',
+        publicMgs: 'Token has expired',
     },
     {
         type: ErrorType.ErrTokenInvalid,
-        pMgs: 'Invalid token',
+        publicMgs: 'Invalid token',
     },
 ];
 
@@ -223,8 +223,30 @@ const errorFuncs = createErrors(errorConfigs);
 const throwErrorFuncs = createThrowErrors(errorConfigs);
 
 export const errors = {
+    New(
+        type: ErrorType,
+        publicMessage: string,
+        options: {
+            cause?: unknown;
+            privateMessage?: string;
+            metadata?: Record<string, any>;
+        } = {},
+    ): DomainError {
+        return new DomainError(type, publicMessage, options);
+    },
     ...errorFuncs,
     throw: {
+        New(
+            type: ErrorType,
+            publicMessage: string,
+            options: {
+                cause?: unknown;
+                privateMessage?: string;
+                metadata?: Record<string, any>;
+            } = {},
+        ): never {
+            throw new DomainError(type, publicMessage, options);
+        },
         ...throwErrorFuncs,
     },
 } as const;
