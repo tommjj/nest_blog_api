@@ -5,13 +5,6 @@ export type HTTPResponse<T> = {
     timestamp: string;
 };
 
-export type HTTPErrorResponse<T> = {
-    message: string;
-    success: boolean;
-    code?: string;
-    details?: T;
-};
-
 export function newSuccessResponse<T>(
     data: T,
     message?: string,
@@ -23,3 +16,12 @@ export function newSuccessResponse<T>(
         timestamp: new Date().toISOString(),
     };
 }
+
+export type HTTPErrorResponse<T> = {
+    message: string;
+    success: boolean;
+    code?: string;
+    details?: T;
+    path?: string;
+    timestamp: string;
+};

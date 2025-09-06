@@ -11,6 +11,7 @@ import { ErrorType, DomainError } from '../../../core/domain/errors';
 import { ZodError } from 'zod/v4';
 import * as loggerPort from 'src/core/port/logger.port';
 import { LOGGER_PORT } from 'src/infrastructure/logger/logger.module';
+import { HTTPErrorResponse } from '../dto/response';
 
 const errorStatusMap: Record<ErrorType, number> = {
     [ErrorType.ErrNotFound]: HttpStatus.NOT_FOUND,
@@ -59,10 +60,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
                 details = this.parseZodError(exception.cause);
             }
 
-            if (
-                exception.type === ErrorType.ErrInternal ||
-                exception.type === ErrorType.ErrUnknown
-            ) {
+            if (this.isInternal(exception)) {
                 this.logx.error(
                     `${exception.privateMessage}: ${exception.cause as any}`,
                     { path: req.url },
@@ -78,12 +76,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
         }
 
         res.status(status).json({
-            statusCode: status,
-            timestamp: new Date().toISOString(),
+            success: false,
             path: req.url,
             message,
             details,
-        });
+            timestamp: new Date().toISOString(),
+        } as HTTPErrorResponse<unknown>);
     }
 
     /**
@@ -103,5 +101,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
             path: Array.isArray(it.path) ? it.path.join('.') : it.path,
             message: it.message,
         }));
+    }
+
+    private isInternal(err: unknown): boolean {
+        if (!(err instanceof DomainError)) {
+            return true;
+        }
+
+        return (
+            err.type === ErrorType.ErrInternal ||
+            err.type === ErrorType.ErrUnknown
+        );
     }
 }
