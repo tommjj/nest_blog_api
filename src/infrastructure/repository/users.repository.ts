@@ -56,7 +56,7 @@ export class UsersRepository implements IUsersRepository {
             handleFindError(result.error);
         }
         if (result.data.length === 0) {
-            errors.NotFound('user not found');
+            throw errors.NotFound('user not found');
         }
 
         return userDto.toUser(result.data[0]);
@@ -73,7 +73,7 @@ export class UsersRepository implements IUsersRepository {
             handleFindError(result.error);
         }
         if (result.data.length === 0) {
-            errors.NotFound('user not found');
+            throw errors.NotFound('user not found');
         }
 
         return userDto.toUser(result.data[0]);
