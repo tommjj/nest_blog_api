@@ -1,19 +1,18 @@
-import {
-    MiddlewareConsumer,
-    Module,
-    NestModule,
-    RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from './filters/http-exceptions.filter';
+
 import { ServiceModule } from 'src/infrastructure/providers/service.module';
-import { UserController } from './users.controller';
 import { LoggerModule } from 'src/infrastructure/logger/logger.module';
+import { AuthzModule } from 'src/infrastructure/providers/authz.module';
+
+import { HttpExceptionFilter } from './filters/http-exceptions.filter';
 import { AuthController } from './auth.controller';
-import { MustParseToken } from './middleware/parse_token.middleware';
+import { ParseToken } from './middleware/parse_token.middleware';
+
+import { UserController } from './users.controller';
 
 @Module({
-    imports: [ServiceModule, LoggerModule],
+    imports: [ServiceModule, AuthzModule, LoggerModule],
     controllers: [UserController, AuthController],
     providers: [
         {
@@ -24,9 +23,6 @@ import { MustParseToken } from './middleware/parse_token.middleware';
 })
 export class HTTPModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(MustParseToken).forRoutes({
-            path: 'users/:id',
-            method: RequestMethod.PATCH,
-        });
+        consumer.apply(ParseToken);
     }
 }

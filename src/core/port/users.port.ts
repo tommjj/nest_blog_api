@@ -1,3 +1,4 @@
+import { TokenPayload } from '../domain/auth';
 import { UserWithPassword, User } from '../domain/users';
 
 export type CreateUser = Omit<
@@ -100,4 +101,49 @@ export interface IUsersService {
      * @throws DomainError if delete fails
      */
     deleteUserAccount(id: number): Promise<void>;
+}
+
+/**
+ *  IUsersAuthz interface for user authz
+ */
+export interface IUsersAuthz {
+    /**
+     * canRegisterUser
+     *
+     * @param token auth token
+     * @throw throw ErrForbidden if user is forbidden to access the resource
+     */
+    canRegisterUser(token: TokenPayload | undefined): Promise<void>;
+
+    /**
+     * canGetUserProfile
+     * @param token auth token
+     * @throw throw ErrForbidden if user is forbidden to access the resource
+     */
+    canGetUserProfile(
+        token: TokenPayload | undefined,
+        id: number,
+    ): Promise<void>;
+
+    /**
+     * canUpdateUserProfile
+     *
+     * @param token auth token
+     * @throw throw ErrForbidden if user is forbidden to access the resource
+     */
+    canUpdateUserProfile(
+        token: TokenPayload | undefined,
+        id: number,
+    ): Promise<void>;
+
+    /**
+     * canDeleteUserAccount
+     *
+     * @param token auth token
+     * @throw throw ErrForbidden if user is forbidden to access the resource
+     */
+    canDeleteUserAccount(
+        token: TokenPayload | undefined,
+        id: number,
+    ): Promise<void>;
 }

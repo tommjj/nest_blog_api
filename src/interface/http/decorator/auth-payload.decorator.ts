@@ -19,7 +19,7 @@ export const AuthPayload = createParamDecorator(
 /**
  * AuthPayload
  * @returns return token payload
- * @throws throws Unauthorized if token not set
+ * @throws throws Unauthorized if token is not set
  */
 export const MustAuthPayload = createParamDecorator(
     (data: unknown, ctx: ExecutionContext) => {
