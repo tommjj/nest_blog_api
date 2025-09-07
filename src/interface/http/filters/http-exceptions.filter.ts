@@ -32,6 +32,7 @@ const errorStatusMap: Record<ErrorType, number> = {
     [ErrorType.ErrTokenMissing]: HttpStatus.UNAUTHORIZED,
     [ErrorType.ErrTokenExpired]: HttpStatus.UNAUTHORIZED,
     [ErrorType.ErrTokenInvalid]: HttpStatus.UNAUTHORIZED,
+    [ErrorType.ErrTokenTypeInvalid]: HttpStatus.UNAUTHORIZED,
 };
 
 function getStatus(type: ErrorType): number {

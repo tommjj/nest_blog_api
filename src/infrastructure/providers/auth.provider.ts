@@ -7,6 +7,7 @@ import AuthService from '../../core/services/auth.service';
 import { UsersRepository } from '../repository/users.repository';
 import { JWTTokenAdapter } from '../auth/jwt.adapter';
 import { Argon2PasswordAdapter } from '../auth/password.adapter';
+import TokenVerifyService from 'src/core/services/token.service';
 
 export const AUTH_SERVICE = Symbol('AUTH_SERVICE');
 export const authProvider: Provider = {
@@ -19,4 +20,13 @@ export const authProvider: Provider = {
         return new AuthService(userRepo, tokenAdapter, hashAdapter);
     },
     inject: [UsersRepository, JWTTokenAdapter, Argon2PasswordAdapter],
+};
+
+export const TOKEN_VERIFY_SERVICE = Symbol('TOKEN_VERIFY_SERVICE');
+export const tokenVerifyProvider: Provider = {
+    provide: TOKEN_VERIFY_SERVICE,
+    useFactory(tokenAdapter: ITokenPort) {
+        return new TokenVerifyService(tokenAdapter);
+    },
+    inject: [JWTTokenAdapter],
 };

@@ -24,6 +24,7 @@ export enum ErrorType {
     ErrTokenMissing = 'TokenMissing',
     ErrTokenExpired = 'TokenExpired',
     ErrTokenInvalid = 'TokenInvalid',
+    ErrTokenTypeInvalid = 'TokenTypeInvalid',
 }
 
 /**
@@ -216,6 +217,10 @@ const errorConfigs = [
     {
         type: ErrorType.ErrTokenInvalid,
         publicMgs: 'Invalid token',
+    },
+    {
+        type: ErrorType.ErrTokenTypeInvalid,
+        publicMgs: 'Invalid token type',
     },
 ];
 

@@ -14,6 +14,8 @@ import { ZodValidationPipe } from './pipes/zod.pipe';
 import * as usersZod from './dto/users.zod';
 import { newUserResponse } from './dto/users.dto';
 import { IntPipe } from './pipes/param.pipe';
+import { MustAuthPayload } from './decorator/auth-payload.decorator';
+import type { TokenPayload } from 'src/core/domain/auth';
 
 @Controller('users')
 export class UserController {
@@ -39,6 +41,7 @@ export class UserController {
     async updateUserProfile(
         @Param('id', IntPipe) id: number,
         @Body() updateUserBody: usersZod.UpdateUserBody,
+        @MustAuthPayload() tokenPayload: TokenPayload,
     ) {
         const user = await this.userService.updateUserProfile({
             id: id,
