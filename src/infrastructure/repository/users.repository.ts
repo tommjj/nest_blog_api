@@ -2,17 +2,17 @@ import { Injectable, Inject } from '@nestjs/common';
 
 import { eq } from 'drizzle-orm';
 
-import type { UserWithPassword } from '../../core/domain/users';
-import { errors } from '../../core/domain/errors';
-import { withError } from '../../common/helper/withError';
+import type { UserWithPassword } from 'src/core/domain/users';
+import { errors } from 'src/core/domain/errors';
+import { withError } from 'src/common/helper/withError';
 import type {
     CreateUser,
     IUsersRepository,
     UpdateUser,
-} from '../../core/port/users.port';
+} from 'src/core/port/users.port';
 
 import * as schema from '../db/schema';
-import { DB_PROVIDER_NAME } from '../db/sqlite.module';
+import { DB_CLIENT } from '../db/sqlite.module';
 import type { SQLiteDB } from '../db/sqlite.module';
 import {
     handleDeleteError,
@@ -28,7 +28,7 @@ import { userDto } from './dto/users.dto';
  */
 @Injectable()
 export class UsersRepository implements IUsersRepository {
-    constructor(@Inject(DB_PROVIDER_NAME) private db: SQLiteDB) {}
+    constructor(@Inject(DB_CLIENT) private db: SQLiteDB) {}
 
     async createUser(user: CreateUser): Promise<UserWithPassword> {
         const createdUser = await withError(

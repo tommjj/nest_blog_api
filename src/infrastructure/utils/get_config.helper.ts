@@ -1,5 +1,6 @@
 import { ConfigService } from '@nestjs/config';
-import { errors } from '../../core/domain/errors';
+
+import { errors } from 'src/core/domain/errors';
 
 export function config(conf: ConfigService) {
     return {

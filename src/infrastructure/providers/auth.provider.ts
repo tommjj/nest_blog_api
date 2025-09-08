@@ -1,13 +1,13 @@
 import { Provider } from '@nestjs/common';
 
-import { IUsersRepository } from '../../core/port/users.port';
-import { ITokenPort, IPasswordPort } from '../../core/port/auth.port';
-import AuthService from '../../core/services/auth.service';
+import { IUsersRepository } from 'src/core/port/users.port';
+import { ITokenPort, IPasswordPort } from 'src/core/port/auth.port';
+import AuthService from 'src/core/services/auth.service';
+import TokenVerifyService from 'src/core/services/token.service';
 
 import { UsersRepository } from '../repository/users.repository';
 import { JWTTokenAdapter } from '../auth/jwt.adapter';
 import { Argon2PasswordAdapter } from '../auth/password.adapter';
-import TokenVerifyService from 'src/core/services/token.service';
 
 export const AUTH_SERVICE = Symbol('AUTH_SERVICE');
 export const authProvider: Provider = {

@@ -20,7 +20,7 @@ export const users = sqliteTable('users', {
     ...timestamp,
 });
 
-export const posts = sqliteTable('posts', {
+export const blogs = sqliteTable('blogs', {
     id: int('id').primaryKey({ autoIncrement: true }),
     title: text('title').notNull(),
     content: text('content').notNull(),
@@ -36,7 +36,7 @@ export const posts = sqliteTable('posts', {
  * Schema:
  * - id: primary key
  * - content: text
- * - postId: foreign key to posts table
+ * - blogId: foreign key to blogs table
  * - authorId: foreign key to users table
  * - createdAt: timestamp
  * - updatedAt: timestamp
@@ -44,9 +44,9 @@ export const posts = sqliteTable('posts', {
 export const comments = sqliteTable('comments', {
     id: int('id').primaryKey({ autoIncrement: true }),
     content: text('content').notNull(),
-    postId: int('post_id')
+    blogId: int('blog_id')
         .notNull()
-        .references(() => posts.id, { onDelete: 'cascade' }),
+        .references(() => blogs.id, { onDelete: 'cascade' }),
     authorId: int('author_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
@@ -54,26 +54,26 @@ export const comments = sqliteTable('comments', {
     ...timestamp,
 });
 
-// Define relations for posts
-export const postsRelations = relations(posts, ({ many, one }) => ({
+// Define relations for blogs
+export const blogsRelations = relations(blogs, ({ many, one }) => ({
     comments: many(comments),
     author: one(users, {
-        fields: [posts.authorId],
+        fields: [blogs.authorId],
         references: [users.id],
     }),
 }));
 
 // Define relations for users
 export const usersRelations = relations(users, ({ many }) => ({
-    posts: many(posts),
+    blogs: many(blogs),
     comments: many(comments),
 }));
 
 // Define relations for comments
 export const commentsRelations = relations(comments, ({ one }) => ({
-    post: one(posts, {
-        fields: [comments.postId],
-        references: [posts.id],
+    blog: one(blogs, {
+        fields: [comments.blogId],
+        references: [blogs.id],
     }),
     author: one(users, {
         fields: [comments.authorId],

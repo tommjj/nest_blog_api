@@ -1,9 +1,9 @@
 import { Provider } from '@nestjs/common';
 
-import { IUsersRepository } from '../../core/port/users.port';
-import { IPasswordPort } from '../../core/port/auth.port';
-import { UserAuthz } from '../../core/authz/user.authz';
-import UserService from '../../core/services/users.service';
+import { IUsersRepository } from 'src/core/port/users.port';
+import { IPasswordPort } from 'src/core/port/auth.port';
+import { UserAuthz } from 'src/core/authz/user.authz';
+import UserService from 'src/core/services/users.service';
 
 import { UsersRepository } from '../repository/users.repository';
 import { Argon2PasswordAdapter } from '../auth/password.adapter';

@@ -1,7 +1,7 @@
 import z from 'zod';
 
-import { TokenPayload } from '../../../core/domain/auth';
-import { errors } from '../../../core/domain/errors';
+import { TokenPayload } from 'src/core/domain/auth';
+import { errors } from 'src/core/domain/errors';
 
 const tokenPayloadZodSchema = z.object({
     id: z.int(),

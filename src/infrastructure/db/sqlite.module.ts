@@ -3,14 +3,14 @@ import * as schema from './schema';
 import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
 import { ConfigService } from '@nestjs/config';
 
-export const DB_PROVIDER_NAME = Symbol('DB');
+export const DB_CLIENT = Symbol('DB');
 
 export type SQLiteDB = LibSQLDatabase<typeof schema>;
 
 @Module({
     providers: [
         {
-            provide: DB_PROVIDER_NAME,
+            provide: DB_CLIENT,
             useFactory(conf: ConfigService) {
                 const db = drizzle(conf.get<string>('DB_FILE_NAME')!, {
                     schema,
@@ -20,6 +20,6 @@ export type SQLiteDB = LibSQLDatabase<typeof schema>;
             inject: [ConfigService],
         },
     ],
-    exports: [DB_PROVIDER_NAME],
+    exports: [DB_CLIENT],
 })
 export class SqliteModule {}

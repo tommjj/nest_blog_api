@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 
 import jwt from 'jsonwebtoken';
 
-import type { ITokenPort } from '../../core/port/auth.port';
-import { errors } from '../../core/domain/errors';
-import { TokenPayload } from '../../core/domain/auth';
+import type { ITokenPort } from 'src/core/port/auth.port';
+import { errors } from 'src/core/domain/errors';
+import { TokenPayload } from 'src/core/domain/auth';
+
 import { config } from '../utils/get_config.helper';
 import { jwtDto } from './dto/jwt.dto';
 

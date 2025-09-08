@@ -1,10 +1,9 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { TokenPayload } from 'src/core/domain/auth';
 
+import { TokenPayload } from 'src/core/domain/auth';
 import { errors } from 'src/core/domain/errors';
 import type { ITokenVerifyService } from 'src/core/port/auth.port';
-
 import { TOKEN_VERIFY_SERVICE } from 'src/infrastructure/providers/auth.provider';
 
 // authorizationType is the accepted authorization type

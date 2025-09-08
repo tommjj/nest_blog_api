@@ -7,10 +7,12 @@ import {
     Inject,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ErrorType, DomainError } from '../../../core/domain/errors';
 import { ZodError } from 'zod/v4';
+
+import { ErrorType, DomainError } from 'src/core/domain/errors';
 import * as loggerPort from 'src/core/port/logger.port';
 import { LOGGER_PORT } from 'src/infrastructure/logger/logger.module';
+
 import { HTTPErrorResponse } from '../dto/response';
 
 const errorStatusMap: Record<ErrorType, number> = {

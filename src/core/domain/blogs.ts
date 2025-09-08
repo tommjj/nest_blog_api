@@ -1,4 +1,4 @@
-export type Blogs = {
+export type Blog = {
     id: number; // Zero value indicates a new blog
     title: string;
     content: string;
@@ -8,4 +8,4 @@ export type Blogs = {
     updatedAt: Date;
 };
 
-export type BlogInfo = Omit<Blogs, 'content'>;
+export type BlogInfo = Omit<Blog, 'content'>;

@@ -1,6 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
-import { errors } from 'src/core/domain/errors';
 import { ZodType } from 'zod/v4';
+
+import { errors } from 'src/core/domain/errors';
 
 /**
  * ZodBodyValidationPipe validation body

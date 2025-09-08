@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 
-import { IUsersRepository } from '../../core/port/users.port';
-import { IPasswordPort, ITokenPort } from '../../core/port/auth.port';
-import AuthService from '../../core/services/auth.service';
+import { IUsersRepository } from 'src/core/port/users.port';
+import { IPasswordPort, ITokenPort } from 'src/core/port/auth.port';
+import AuthService from 'src/core/services/auth.service';
 
 import { RepositoryModule } from '../repository/repository.module';
 import { UsersRepository } from '../repository/users.repository';

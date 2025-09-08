@@ -1,4 +1,4 @@
-import { User } from '../../../core/domain/users';
+import { User } from 'src/core/domain/users';
 import { HTTPResponse, newSuccessResponse } from './response';
 
 export type UserResponse = {

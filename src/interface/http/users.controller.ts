@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 
 import type { IUsersAuthz, IUsersService } from 'src/core/port/users.port';
+import type { TokenPayload } from 'src/core/domain/auth';
 
 import {
     USERS_AUTHZ,
@@ -23,7 +24,6 @@ import {
     MustAuthPayload,
     AuthPayload,
 } from './decorator/auth-payload.decorator';
-import type { TokenPayload } from 'src/core/domain/auth';
 
 @Controller('users')
 export class UserController {
