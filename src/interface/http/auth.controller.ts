@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import type { IAuthService } from 'src/core/port/auth.port';
 import { AUTH_SERVICE } from 'src/infrastructure/providers/auth.provider';
-import { ZodValidationPipe } from './pipes/zod.pipe';
+import { ZodBodyValidationPipe } from './pipes/zod.pipe';
 import { SignInSchema } from './dto/auth.zod';
 import type { SignInBody } from './dto/auth.zod';
 import { newAuthResponse } from './dto/auth.dto';
@@ -20,7 +20,7 @@ export class AuthController {
 
     @Post('signin')
     @HttpCode(HttpStatus.OK)
-    @UsePipes(new ZodValidationPipe(SignInSchema))
+    @UsePipes(new ZodBodyValidationPipe(SignInSchema))
     async signin(@Body() signinBody: SignInBody) {
         const token = await this.authService.authenticateUser(
             signinBody.email,

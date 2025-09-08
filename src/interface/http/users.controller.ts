@@ -33,7 +33,7 @@ export class UserController {
     ) {}
 
     @Post()
-    @UsePipes(new ZodValidationPipe(usersZod.createUserSchema))
+    @UsePipes(new ZodValidationPipe(usersZod.createUserSchema, 'body'))
     async register(
         @Body() createUserBody: usersZod.CreateUserBody,
         @AuthPayload() tokenPayload?: TokenPayload,
@@ -58,7 +58,7 @@ export class UserController {
     }
 
     @Patch(':id')
-    @UsePipes(new ZodValidationPipe(usersZod.updateUserSchema))
+    @UsePipes(new ZodValidationPipe(usersZod.updateUserSchema, 'body'))
     async updateUserProfile(
         @Param('id', IntPipe) id: number,
         @Body() updateUserBody: usersZod.UpdateUserBody,

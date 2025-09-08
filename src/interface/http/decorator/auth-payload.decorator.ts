@@ -1,9 +1,15 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+    applyDecorators,
+    createParamDecorator,
+    ExecutionContext,
+    UseGuards,
+} from '@nestjs/common';
 import { Request } from 'express';
 import {
     getTokenPayload,
     mustGetTokenPayload,
 } from '../middleware/parse_token.middleware';
+import { AuthGuard } from '../guards/auth.guard';
 
 /**
  * AuthPayload
@@ -27,3 +33,10 @@ export const MustAuthPayload = createParamDecorator(
         return mustGetTokenPayload(req);
     },
 );
+
+/**
+ * MustAuth is a decorator for handler, active route if user is authenticate
+ */
+export function MustAuth() {
+    return applyDecorators(UseGuards(AuthGuard));
+}
