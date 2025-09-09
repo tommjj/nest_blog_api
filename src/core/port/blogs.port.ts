@@ -170,3 +170,14 @@ export interface IBlogsSearchService {
      */
     countBlogs(keyword?: string): Promise<number>;
 }
+
+export interface IBlogOwnershipCheckerService {
+    /**
+     * check user blog ownership
+     *
+     * @param userId - user id
+     * @param blogId - blog id
+     * @throws throw ErrForBidden if user does not have ownership of this blog
+     */
+    check(userId: number, blogId: number): Promise<void>;
+}
