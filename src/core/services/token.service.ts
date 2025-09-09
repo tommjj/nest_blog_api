@@ -5,6 +5,6 @@ export default class TokenVerifyService implements ITokenVerifyService {
     constructor(private tokenAdapter: ITokenPort) {}
 
     verifyToken(token: string): TokenPayload {
-        return this.verifyToken(token);
+        return this.tokenAdapter.verifyToken(token);
     }
 }
