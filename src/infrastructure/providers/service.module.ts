@@ -8,10 +8,28 @@ import {
     tokenVerifyProvider,
 } from './auth.provider';
 import { usersProvider, USERS_SERVICE } from './users.provider';
+import {
+    blogsProvider,
+    blogsSearchProvider,
+    BLOGS_SERVICE,
+    BLOGS_SEARCH_SERVICE,
+} from './blogs.provider';
 
 @Module({
     imports: [RepositoryModule, AuthModule],
-    providers: [authProvider, tokenVerifyProvider, usersProvider],
-    exports: [AUTH_SERVICE, TOKEN_VERIFY_SERVICE, USERS_SERVICE],
+    providers: [
+        authProvider,
+        tokenVerifyProvider,
+        usersProvider,
+        blogsProvider,
+        blogsSearchProvider,
+    ],
+    exports: [
+        AUTH_SERVICE,
+        TOKEN_VERIFY_SERVICE,
+        USERS_SERVICE,
+        BLOGS_SERVICE,
+        BLOGS_SEARCH_SERVICE,
+    ],
 })
 export class ServiceModule {}

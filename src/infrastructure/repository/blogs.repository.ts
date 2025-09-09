@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { Blog } from 'src/core/domain/blogs';
 import {
     CreateBlog,
-    IBlogRepository,
+    IBlogsRepository,
     UpdateBlog,
 } from 'src/core/port/blogs.port';
 import { errors } from 'src/core/domain/errors';
@@ -25,7 +25,7 @@ import { blogDto } from './dto/blogs.dto';
  * BlogsRepository implements IBlogRepository
  */
 @Injectable()
-export class BlogsRepository implements IBlogRepository {
+export class BlogsRepository implements IBlogsRepository {
     constructor(@Inject(DB_CLIENT) private db: SQLiteDB) {}
 
     async createBlog(blog: CreateBlog): Promise<Blog> {
