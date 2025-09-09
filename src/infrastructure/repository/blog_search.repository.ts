@@ -11,6 +11,14 @@ import type { SQLiteDB } from '../db/sqlite.module';
 import { handleFindError } from './helper';
 import { blogDto } from './dto/blogs.dto';
 
+const sqlBlogInfoSelect = {
+    id: schema.blogs.id,
+    title: schema.blogs.title,
+    authorId: schema.blogs.authorId,
+    updatedAt: schema.blogs.updatedAt,
+    createdAt: schema.blogs.createdAt,
+};
+
 /**
  * BlogsSearchRepository implements IBlogsSearchPort
  */
@@ -30,7 +38,7 @@ export class BlogsSearchRepository implements IBlogsSearchPort {
 
         const result = await withError(
             this.db
-                .select()
+                .select(sqlBlogInfoSelect)
                 .from(schema.blogs)
                 .where(like(schema.blogs.title, `%${keyword}%`))
                 .limit(limit)
@@ -45,7 +53,7 @@ export class BlogsSearchRepository implements IBlogsSearchPort {
 
         return {
             total: count,
-            hits: result.data.map((b) => blogDto.toBlog(b)),
+            hits: result.data.map((b) => blogDto.toBlogInfo(b)),
             limit: limit,
             offset: offset,
         };
@@ -63,7 +71,7 @@ export class BlogsSearchRepository implements IBlogsSearchPort {
 
         const result = await withError(
             this.db
-                .select()
+                .select(sqlBlogInfoSelect)
                 .from(schema.blogs)
                 .where(eq(schema.blogs.authorId, authorId))
                 .limit(limit)
@@ -78,7 +86,7 @@ export class BlogsSearchRepository implements IBlogsSearchPort {
 
         return {
             total: count,
-            hits: result.data.map((b) => blogDto.toBlog(b)),
+            hits: result.data.map((b) => blogDto.toBlogInfo(b)),
             limit: limit,
             offset: offset,
         };

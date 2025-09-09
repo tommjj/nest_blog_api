@@ -1,5 +1,5 @@
 import { TokenPayload } from '../domain/auth';
-import { Blog } from '../domain/blogs';
+import { Blog, BlogInfo } from '../domain/blogs';
 
 export type CreateBlog = Omit<Blog, 'id' | 'createdAt' | 'updatedAt'>;
 export type UpdateBlog = Partial<Omit<CreateBlog, 'authorId'>> & { id: number };
@@ -43,7 +43,7 @@ export interface IBlogsRepository {
 
 export interface BlogsSearchResult {
     total: number;
-    hits: Blog[];
+    hits: BlogInfo[];
     offset: number;
     limit: number;
 }

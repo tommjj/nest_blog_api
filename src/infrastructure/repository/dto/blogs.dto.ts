@@ -1,5 +1,5 @@
 import type { BlogsSchema } from '../../db/schema.type';
-import type { Blog } from 'src/core/domain/blogs';
+import type { Blog, BlogInfo } from 'src/core/domain/blogs';
 
 /**
  * toBlog dto convert PostsSchema to Blog
@@ -17,6 +17,22 @@ function toBlog(blog: BlogsSchema): Blog {
     };
 }
 
+/**
+ * toBlog dto convert PostsSchema to BlogInfo
+ * NOTE: this function is not validate input data
+ */
+function toBlogInfo(blog: Omit<BlogsSchema, 'content'>): BlogInfo {
+    return {
+        id: blog.id,
+        title: blog.title,
+        authorId: blog.authorId,
+
+        updatedAt: new Date(blog.updatedAt),
+        createdAt: new Date(blog.createdAt),
+    };
+}
+
 export const blogDto = {
     toBlog,
+    toBlogInfo,
 };
