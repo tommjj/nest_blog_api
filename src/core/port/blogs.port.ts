@@ -39,3 +39,52 @@ export interface IBlogRepository {
      */
     deleteBlog(id: number): Promise<void>;
 }
+
+export interface BlogsSearchResult {
+    total: number;
+    hits: Blog[];
+    offset: number;
+    limit: number;
+}
+
+export interface IBlogsSearchPort {
+    /**
+     * searchBlogs search blogs by keyword in title or content
+     *
+     * @param keyword - keyword to search
+     * @param limit - max number of results
+     * @param offset - pagination offset
+     */
+    searchBlogs(
+        keyword: string,
+        limit?: number,
+        offset?: number,
+    ): Promise<BlogsSearchResult>;
+
+    /**
+     * findBlogsByAuthor find blogs by a specific author
+     *
+     * @param authorId - author id
+     * @param limit - max number of results
+     * @param offset - pagination offset
+     */
+    findBlogsByAuthor(
+        authorId: number,
+        limit?: number,
+        offset?: number,
+    ): Promise<BlogsSearchResult>;
+
+    /**
+     * countBlogs count total blogs matching a keyword
+     *
+     * @param keyword - keyword to search
+     */
+    countBlogsByAuthor(authorId: number): Promise<number>;
+
+    /**
+     * countBlogs count total blogs matching a keyword
+     *
+     * @param keyword - keyword to search
+     */
+    countBlogs(keyword?: string): Promise<number>;
+}
