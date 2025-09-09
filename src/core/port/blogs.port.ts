@@ -1,3 +1,4 @@
+import { TokenPayload } from '../domain/auth';
 import { Blog } from '../domain/blogs';
 
 export type CreateBlog = Omit<Blog, 'id' | 'createdAt' | 'updatedAt'>;
@@ -180,4 +181,58 @@ export interface IBlogOwnershipCheckerService {
      * @throws throw ErrForBidden if user does not have ownership of this blog
      */
     check(userId: number, blogId: number): Promise<void>;
+}
+
+/**
+ * IBlogsAuthz interface for blog authorization
+ */
+export interface IBlogsAuthz {
+    /**
+     * canCreateBlog
+     *
+     * @param token auth token
+     * @throw ErrForbidden if user is forbidden to create a blog
+     */
+    canCreateBlog(token: TokenPayload | undefined): Promise<void>;
+
+    /**
+     * canGetBlog
+     *
+     * @param token auth token
+     * @param blogId blog identifier
+     * @throw ErrForbidden if user is forbidden to access the blog
+     */
+    canGetBlog(token: TokenPayload | undefined, blogId: number): Promise<void>;
+
+    /**
+     * canUpdateBlog
+     *
+     * @param token auth token
+     * @param blogId blog identifier
+     * @throw ErrForbidden if user is forbidden to update the blog
+     */
+    canUpdateBlog(
+        token: TokenPayload | undefined,
+        blogId: number,
+    ): Promise<void>;
+
+    /**
+     * canDeleteBlog
+     *
+     * @param token auth token
+     * @param blogId blog identifier
+     * @throw ErrForbidden if user is forbidden to delete the blog
+     */
+    canDeleteBlog(
+        token: TokenPayload | undefined,
+        blogId: number,
+    ): Promise<void>;
+
+    /**
+     * canSearchBlogs
+     *
+     * @param token auth token
+     * @throw ErrForbidden if user is forbidden to search blogs
+     */
+    canSearchBlogs(token: TokenPayload | undefined): Promise<void>;
 }
