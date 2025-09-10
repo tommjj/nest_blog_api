@@ -16,10 +16,16 @@ import { ParseToken } from './middleware/parse_token.middleware';
 
 import { UserController } from './users.controller';
 import { BlogsController } from './blogs.controller';
+import { BlogsSearchController } from './blogs_search.controller';
 
 @Module({
     imports: [ServiceModule, AuthzModule, LoggerModule],
-    controllers: [UserController, AuthController, BlogsController],
+    controllers: [
+        UserController,
+        AuthController,
+        BlogsController,
+        BlogsSearchController,
+    ],
     providers: [
         {
             provide: APP_FILTER,

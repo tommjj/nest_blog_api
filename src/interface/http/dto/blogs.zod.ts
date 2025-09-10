@@ -20,3 +20,18 @@ export const updateBlogSchema = z
     );
 
 export type UpdateBlogBody = z.infer<typeof updateBlogSchema>;
+
+export const searchBlogSchema = z.object({
+    q: z.string().max(255).default(''),
+    limit: z.coerce.number().int().min(5).max(50).default(10),
+    page: z.coerce.number().int().min(1).default(1),
+});
+
+export type SearchBlogQuery = z.infer<typeof searchBlogSchema>;
+
+export const pageSchema = z.object({
+    limit: z.coerce.number().int().min(5).max(50).default(10),
+    page: z.coerce.number().int().min(1).default(1),
+});
+
+export type PageQuery = z.infer<typeof pageSchema>;

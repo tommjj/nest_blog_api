@@ -5,7 +5,7 @@ import BlogsService from 'src/core/services/blogs.service';
 
 import { BlogsRepository } from '../repository/blogs.repository';
 import BlogsSearchService from 'src/core/services/blogs_search.service';
-import { BlogsSearchRepository } from '../repository/blog_search.repository';
+import { BlogsSearchRepository } from '../repository/blogs_search.repository';
 import { BlogsAuthz } from 'src/core/authz/blog.authz';
 import BlogOwnershipCheckerService from 'src/core/services/blog_ornership_checker.service';
 
