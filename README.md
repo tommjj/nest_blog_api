@@ -24,8 +24,6 @@ Backend service được xây dựng với **NestJS** theo kiến trúc nhiều 
 
 ## 🚀 Features
 
-## 🚀 Features
-
 - **Authentication & Authorization**
     - JWT authentication (`/auth/signin`)
     - Authorization module cho Blog & User
