@@ -15,11 +15,11 @@ export class NodeCacheAdapter implements IKVCachePort {
         this.cache = new NodeCache();
     }
 
-    async Set(key: string, value: any, ttl: number): Promise<void> {
+    async set(key: string, value: any, ttl: number): Promise<void> {
         this.cache.set(key, value, ttl);
     }
 
-    async MSet<T>(ttl: number, kv: Record<string, T>): Promise<void> {
+    async mset<T>(ttl: number, kv: Record<string, T>): Promise<void> {
         this.cache.mset(
             Object.entries(kv).map(([key, value]) => ({
                 key: key,
@@ -29,13 +29,13 @@ export class NodeCacheAdapter implements IKVCachePort {
         );
     }
 
-    async SetNX(key: string, value: any, ttl: number): Promise<void> {
+    async setNX(key: string, value: any, ttl: number): Promise<void> {
         if (!this.cache.has(key)) {
             this.cache.set(key, value, ttl);
         }
     }
 
-    async Get(key: string): Promise<any> {
+    async get(key: string): Promise<any> {
         const result = this.cache.get(key);
         if (result === undefined || result === null) {
             throw errors.NotFound(`cache missing key ${key}`);
@@ -43,21 +43,21 @@ export class NodeCacheAdapter implements IKVCachePort {
         return result;
     }
 
-    async MGet(keys: string[]): Promise<any[]> {
+    async mget(keys: string[]): Promise<any[]> {
         const result = this.cache.mget(keys);
         return keys.map((key) => result[key]);
     }
 
-    async Exists(key: string): Promise<boolean> {
+    async exists(key: string): Promise<boolean> {
         return this.cache.has(key);
     }
 
-    async DelByPrefix(prefix: string): Promise<void> {
+    async delByPrefix(prefix: string): Promise<void> {
         const keys = this.cache.keys().filter((key) => key.startsWith(prefix));
         this.cache.del(keys);
     }
 
-    async Del(key: string): Promise<void> {
+    async del(key: string): Promise<void> {
         this.cache.del(key);
     }
 }

@@ -6,14 +6,14 @@ export interface IKVCachePort {
      * @param value - value
      * @param ttl - time-to-live
      */
-    Set(key: string, value: any, ttl: number): Promise<void>;
+    set(key: string, value: any, ttl: number): Promise<void>;
     /**
      * MSet is like Set but accepts multiple values
      *
      * @param ttl - time-to-live
      * @param kv - key value record
      */
-    MSet(ttl: number, kv: Record<string, any>): Promise<void>;
+    mset(ttl: number, kv: Record<string, any>): Promise<void>;
     /**
      * SetNX stores a value in storage with the key and time-to-live (TTL) if the key does not exist.
      *
@@ -21,35 +21,35 @@ export interface IKVCachePort {
      * @param value - value
      * @param ttl - time-to-live
      */
-    SetNX(key: string, value: any, ttl: number): Promise<void>;
+    setNX(key: string, value: any, ttl: number): Promise<void>;
     /**
      * Get retrieves a value from storage by key.
      *
      * @param key - key
      */
-    Get(key: string): Promise<any>;
+    get(key: string): Promise<any>;
     /**
      * MGet retrieves multiple values from storage by keys.
      *
      * @param keys - key
      */
-    MGet(keys: string[]): Promise<any[]>;
+    mget(keys: string[]): Promise<any[]>;
     /**
      * Exists checks if a key exists in storage.
      *
      * @param key - key
      */
-    Exists(key: string): Promise<boolean>;
+    exists(key: string): Promise<boolean>;
     /**
      * DelByPrefix deletes all keys that match the given prefix.
      *
      * @param prefix - prefix
      */
-    DelByPrefix(prefix: string): Promise<void>;
+    delByPrefix(prefix: string): Promise<void>;
     /**
      * Del removes a specific key from storage.
      *
      * @param key - key
      */
-    Del(key: string): Promise<void>;
+    del(key: string): Promise<void>;
 }

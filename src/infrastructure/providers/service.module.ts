@@ -14,9 +14,11 @@ import {
     BLOGS_SERVICE,
     BLOGS_SEARCH_SERVICE,
 } from './blogs.provider';
+import { CacheModule } from '../cache/cache.module';
+import { LoggerModule } from '../logger/logger.module';
 
 @Module({
-    imports: [RepositoryModule, AuthModule],
+    imports: [RepositoryModule, AuthModule, CacheModule, LoggerModule],
     providers: [
         authProvider,
         tokenVerifyProvider,
