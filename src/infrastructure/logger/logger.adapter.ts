@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import pino from 'pino';
 import { ILoggerPort } from 'src/core/port/logger.port';
 
-function newLogger(level: string = 'info'): pino.Logger {
+function newLogger(filePrefix: string, level: string = 'info'): pino.Logger {
     return pino({
         level: level,
         transport: {
@@ -19,7 +19,7 @@ function newLogger(level: string = 'info'): pino.Logger {
                 {
                     target: 'pino-roll',
                     options: {
-                        file: join('logs', 'app'),
+                        file: join('logs', filePrefix),
                         frequency: 'daily',
                         mkdir: true,
                         colorize: true,
@@ -39,8 +39,8 @@ function newLogger(level: string = 'info'): pino.Logger {
 class LoggerAdapter implements ILoggerPort {
     private readonly logger: pino.Logger;
 
-    constructor() {
-        this.logger = newLogger(process.env.LOG_LEVEL);
+    constructor(filePrefix: string, level: string) {
+        this.logger = newLogger(filePrefix, level);
     }
 
     debug(message: string, metadata?: Record<string, any>): void {

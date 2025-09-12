@@ -44,7 +44,7 @@ export class MustParseToken implements NestMiddleware {
 }
 
 @Injectable()
-export class ParseToken implements NestMiddleware {
+export class ParseTokenMiddleware implements NestMiddleware {
     constructor(
         @Inject(TOKEN_VERIFY_SERVICE)
         private tokenVerifyService: ITokenVerifyService,

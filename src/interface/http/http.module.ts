@@ -12,7 +12,8 @@ import { AuthzModule } from 'src/infrastructure/providers/authz.module';
 
 import { HttpExceptionFilter } from './filters/http-exceptions.filter';
 import { AuthController } from './auth.controller';
-import { ParseToken } from './middleware/parse_token.middleware';
+import { ParseTokenMiddleware } from './middleware/parse_token.middleware';
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import { UserController } from './users.controller';
 import { BlogsController } from './blogs.controller';
@@ -35,7 +36,12 @@ import { BlogsSearchController } from './blogs_search.controller';
 })
 export class HTTPModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(ParseToken).forRoutes({
+        consumer.apply(LoggerMiddleware).forRoutes({
+            path: '*',
+            method: RequestMethod.ALL,
+        });
+
+        consumer.apply(ParseTokenMiddleware).forRoutes({
             path: '*',
             method: RequestMethod.ALL,
         });
