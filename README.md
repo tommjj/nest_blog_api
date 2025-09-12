@@ -53,10 +53,10 @@ Backend service được xây dựng với **NestJS** theo kiến trúc nhiều 
 ## 🛠️ Tech Stack
 
 - [NestJS](https://nestjs.com/) - Node.js framework
-- [SQLite](https://www.sqlite.org/) (qua Drizzle ORM) - database
+- [SQLite](https://www.sqlite.org/) (qua [Drizzle ORM](https://orm.drizzle.team)) - database
 - [Node-Cache](https://github.com/node-cache/node-cache) - caching
 - [Jest](https://jestjs.io/) - testing
-- Logger custom module
+- [Pino](https://github.com/pinojs/pino) Logger
 
 ---
 
