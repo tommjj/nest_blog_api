@@ -5,23 +5,57 @@ import {
     IBlogsService,
     UpdateBlog,
 } from '../port/blogs.port';
+import { IKVCachePort } from '../port/cache.port';
+import { ILoggerPort } from '../port/logger.port';
+import { CacheHelper, newDefaultCacheErrorHandler } from '../utils/cache';
+import { parser } from './dto/blogs.dto';
+
+const BLOG_CACHE_PREFIX = 'blogs:';
+const BLOG_CACHE_TTL = 3600;
 
 export default class BlogsService implements IBlogsService {
-    constructor(private blogsRepository: IBlogsRepository) {}
-
-    createBlog(blog: CreateBlog): Promise<Blog> {
-        return this.blogsRepository.createBlog(blog);
+    private cache: CacheHelper<Blog>;
+    constructor(
+        private blogsRepository: IBlogsRepository,
+        cache: IKVCachePort,
+        private log: ILoggerPort,
+    ) {
+        this.cache = new CacheHelper(
+            cache,
+            parser.toBlog,
+            BLOG_CACHE_PREFIX,
+            BLOG_CACHE_TTL,
+            newDefaultCacheErrorHandler(BLOG_CACHE_PREFIX, log),
+        );
     }
 
-    getBlogByID(id: number): Promise<Blog> {
-        return this.blogsRepository.getBlogByID(id);
+    async createBlog(blog: CreateBlog): Promise<Blog> {
+        const result = await this.blogsRepository.createBlog(blog);
+
+        await this.cache.set(result.id, result);
+        return result;
     }
 
-    updateBlog(blog: UpdateBlog): Promise<Blog> {
-        return this.blogsRepository.updateBlog(blog);
+    async getBlogByID(id: number): Promise<Blog> {
+        const cacheResult = await this.cache.get(id);
+        if (cacheResult) {
+            this.log.debug(`blog cache with id #${cacheResult.id}`);
+            return cacheResult;
+        }
+
+        const result = await this.blogsRepository.getBlogByID(id);
+        await this.cache.set(result.id, result);
+        return result;
     }
 
-    deleteBlog(id: number): Promise<void> {
-        return this.blogsRepository.deleteBlog(id);
+    async updateBlog(blog: UpdateBlog): Promise<Blog> {
+        const result = await this.blogsRepository.updateBlog(blog);
+        await this.cache.set(result.id, result);
+        return result;
+    }
+
+    async deleteBlog(id: number): Promise<void> {
+        await this.blogsRepository.deleteBlog(id);
+        await this.cache.del(id);
     }
 }

@@ -1,21 +1,29 @@
 import { Provider } from '@nestjs/common';
 
+import { ILoggerPort } from 'src/core/port/logger.port';
+import { IKVCachePort } from 'src/core/port/cache.port';
 import { IBlogsRepository, IBlogsSearchPort } from 'src/core/port/blogs.port';
+import BlogsSearchService from 'src/core/services/blogs_search.service';
 import BlogsService from 'src/core/services/blogs.service';
+import { BlogsAuthz } from 'src/core/authz/blog.authz';
 
 import { BlogsRepository } from '../repository/blogs.repository';
-import BlogsSearchService from 'src/core/services/blogs_search.service';
 import { BlogsSearchRepository } from '../repository/blogs_search.repository';
-import { BlogsAuthz } from 'src/core/authz/blog.authz';
 import BlogOwnershipCheckerService from 'src/core/services/blog_ornership_checker.service';
+import { NodeCacheAdapter } from '../cache/node_cache.adapter';
+import { LOGGER_PORT } from '../logger/logger.module';
 
 export const BLOGS_SERVICE = Symbol('BLOGS_SERVICE');
 export const blogsProvider: Provider = {
     provide: BLOGS_SERVICE,
-    useFactory(blogsRepo: IBlogsRepository) {
-        return new BlogsService(blogsRepo);
+    useFactory(
+        blogsRepo: IBlogsRepository,
+        cache: IKVCachePort,
+        log: ILoggerPort,
+    ) {
+        return new BlogsService(blogsRepo, cache, log);
     },
-    inject: [BlogsRepository],
+    inject: [BlogsRepository, NodeCacheAdapter, LOGGER_PORT],
 };
 
 export const BLOGS_SEARCH_SERVICE = Symbol('BLOGS_SEARCH_SERVICE');
