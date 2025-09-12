@@ -29,10 +29,14 @@ export const blogsProvider: Provider = {
 export const BLOGS_SEARCH_SERVICE = Symbol('BLOGS_SEARCH_SERVICE');
 export const blogsSearchProvider: Provider = {
     provide: BLOGS_SEARCH_SERVICE,
-    useFactory(blogsSearchPort: IBlogsSearchPort) {
-        return new BlogsSearchService(blogsSearchPort);
+    useFactory(
+        blogsSearchPort: IBlogsSearchPort,
+        cache: IKVCachePort,
+        log: ILoggerPort,
+    ) {
+        return new BlogsSearchService(blogsSearchPort, cache, log);
     },
-    inject: [BlogsSearchRepository],
+    inject: [BlogsSearchRepository, NodeCacheAdapter, LOGGER_PORT],
 };
 
 export const BLOGS_AUTHZ = Symbol('BLOGS_AUTHZ');
