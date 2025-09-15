@@ -39,7 +39,6 @@ export default class BlogsService implements IBlogsService {
     async getBlogByID(id: number): Promise<Blog> {
         const cacheResult = await this.cache.get(id);
         if (cacheResult) {
-            this.log.debug(`blog cache with id #${cacheResult.id}`);
             return cacheResult;
         }
 

@@ -11,21 +11,22 @@ export class LoggerMiddleware implements NestMiddleware {
     ) {}
 
     use(req: Request, res: Response, next: NextFunction) {
-        const start = Date.now();
+        const start = process.hrtime();
 
         res.on('finish', () => {
             const { method, originalUrl, ip, headers } = req;
             const { statusCode } = res;
-            const duration = Date.now() - start;
+            const diff = process.hrtime(start);
+            const durationMs = diff[0] * 1e3 + diff[1] / 1e6;
 
-            const message = `${method} ${originalUrl} ${statusCode} (${duration}ms)`;
+            const message = `${method} ${originalUrl} ${statusCode} (${durationMs}ms)`;
 
             const metadata = {
                 ip,
                 userAgent: headers['user-agent'],
                 contentLength: headers['content-length'],
                 statusCode,
-                duration,
+                durationMs,
             };
 
             if (statusCode >= 500) {
