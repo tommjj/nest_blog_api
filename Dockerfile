@@ -1,28 +1,29 @@
-FROM node:alpine AS development
+# Stage build
+FROM node:alpine AS build
 
-WORKDIR /usr/src/app
+ARG DB_FILE_NAME
+ENV DB_FILE_NAME=$DB_FILE_NAME
 
+WORKDIR /app
 COPY package*.json ./
-
-RUN npm install
-
-COPY . . 
-
+RUN npm ci
+COPY . .
 RUN npm run build
 
-FROM node:alpine as production
+RUN npx drizzle-kit push 
 
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+# Stage production
+FROM node:alpine AS production
 
-WORKDIR /usr/src/app
-
+WORKDIR /app
 COPY package*.json ./
+RUN npm ci --only=production
 
-RUN npm install --omit=dev
+ARG DB_FILE_NAME
 
-COPY . .
+# Copy thư mục dist từ stage build
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/${DB_FILE_NAME} .
 
-COPY --from=development /usr/src/app/dist ./dist
-
-CMD ["node", "dist/main"]
+# CMD trỏ tới file đầu ra thực tế
+CMD ["node", "dist/src/main.js"] 

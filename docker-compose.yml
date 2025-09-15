@@ -1,4 +1,18 @@
 services:
+    nest-blog:
+        build:
+            context: .
+            args:
+                - DB_FILE_NAME=${DB_FILE_PATH}
+            dockerfile: Dockerfile
+        container_name: nest-blog
+        env_file: .env
+        ports:
+            - '${PORT}:8080'
+        depends_on:
+            - prometheus
+            - grafana
+
     prometheus:
         image: prom/prometheus:latest
         container_name: prometheus
