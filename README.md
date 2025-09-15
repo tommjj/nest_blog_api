@@ -10,6 +10,7 @@ Backend service được xây dựng với **NestJS** theo kiến trúc nhiều 
 - Quản lý blog (CRUD)
 - Tìm kiếm blog
 - Caching & logging
+- Giám sát hệ thống (metrics & dashboards)
 
 ---
 
@@ -47,6 +48,7 @@ Backend service được xây dựng với **NestJS** theo kiến trúc nhiều 
     - `GET /ping` - health check
     - Logging: ghi log hàng ngày trong thư mục `logs/`
     - Cache: hỗ trợ cache layer qua `node-cache` adapter
+    - Metrics: `/metrics` endpoint cho Prometheus scrape
 
 ---
 
@@ -55,8 +57,10 @@ Backend service được xây dựng với **NestJS** theo kiến trúc nhiều 
 - [NestJS](https://nestjs.com/) - Node.js framework
 - [SQLite](https://www.sqlite.org/) (qua [Drizzle ORM](https://orm.drizzle.team)) - database
 - [Node-Cache](https://github.com/node-cache/node-cache) - caching
+- [Pino](https://github.com/pinojs/pino) logging
+- [Prometheus](https://prometheus.io/) - metrics collection
+- [Grafana](https://grafana.com/) - metrics visualization
 - [Jest](https://jestjs.io/) - testing
-- [Pino](https://github.com/pinojs/pino) Logger
 
 ---
 
