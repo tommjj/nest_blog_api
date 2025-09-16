@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+
+import { config } from '../utils/get_config.helper';
+
 import * as schema from './schema';
 import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
 import { ConfigService } from '@nestjs/config';
@@ -12,7 +15,9 @@ export type SQLiteDB = LibSQLDatabase<typeof schema>;
         {
             provide: DB_CLIENT,
             useFactory(conf: ConfigService) {
-                const db = drizzle(conf.get<string>('DB_FILE_NAME')!, {
+                const dbUrl = `file:${config(conf).mustString('DB_FILE_NAME')}`;
+
+                const db = drizzle(dbUrl, {
                     schema,
                 });
                 return db;

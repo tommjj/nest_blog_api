@@ -20,7 +20,6 @@ import { BlogsSearchController } from './blogs_search.controller';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { MetricsModule } from 'src/interface/http/metrics/metrics.module';
 import { HttpMetricsInterceptor } from './metrics/http-metrics.interceptor';
-import { MetricsController } from './metrics.controller';
 
 @Module({
     imports: [ServiceModule, AuthzModule, LoggerModule, MetricsModule],
@@ -29,7 +28,6 @@ import { MetricsController } from './metrics.controller';
         AuthController,
         BlogsController,
         BlogsSearchController,
-        MetricsController,
     ],
     providers: [
         {

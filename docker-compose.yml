@@ -3,7 +3,7 @@ services:
         build:
             context: .
             args:
-                - DB_FILE_NAME=${DB_FILE_PATH}
+                - DB_FILE_NAME=${DB_FILE_NAME}
             dockerfile: Dockerfile
         container_name: nest-blog
         env_file: .env

@@ -203,7 +203,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_eventloop_lag_seconds{instance=~\"$instance\"}",
+                    "expr": "nodejs_eventloop_lag_seconds{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "{{instance}}",
@@ -242,7 +242,7 @@
                         "insertNulls": false,
                         "lineInterpolation": "linear",
                         "lineWidth": 1,
-                        "pointSize": 5,
+                        "pointSize": 1,
                         "scaleDistribution": {
                             "type": "linear"
                         },
@@ -269,7 +269,8 @@
                                 "value": 80
                             }
                         ]
-                    }
+                    },
+                    "unit": "s"
                 },
                 "overrides": []
             },
@@ -298,6 +299,7 @@
                 {
                     "editorMode": "code",
                     "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+                    "interval": "",
                     "legendFormat": "{{p95}}",
                     "range": true,
                     "refId": "A"
@@ -394,7 +396,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_active_handles_total{instance=~\"$instance\"}",
+                    "expr": "nodejs_active_handles_total{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Active Handler - {{instance}}",
@@ -405,7 +407,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_active_requests_total{instance=~\"$instance\"}",
+                    "expr": "nodejs_active_requests_total{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Active Request - {{instance}}",
@@ -503,7 +505,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "irate(process_cpu_user_seconds_total{instance=~\"$instance\"}[2m]) * 100",
+                    "expr": "irate(process_cpu_user_seconds_total{instance=~\"$instance|.*\"}[2m]) * 100",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "User CPU - {{instance}}",
@@ -514,7 +516,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "irate(process_cpu_system_seconds_total{instance=~\"$instance\"}[2m]) * 100",
+                    "expr": "irate(process_cpu_system_seconds_total{instance=~\"$instance|.*\"}[2m]) * 100",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Sys CPU - {{instance}}",
@@ -612,7 +614,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_heap_space_size_available_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_heap_space_size_available_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Heap Used - {{instance}} - {{space}}",
@@ -710,7 +712,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "process_resident_memory_bytes{instance=~\"$instance\"}",
+                    "expr": "process_resident_memory_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Process Memory - {{instance}}",
@@ -721,7 +723,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_heap_size_total_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_heap_size_total_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Heap Total - {{instance}}",
@@ -732,7 +734,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_heap_size_used_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_heap_size_used_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Heap Used - {{instance}}",
@@ -743,7 +745,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_external_memory_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_external_memory_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "External Memory - {{instance}}",
@@ -841,7 +843,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_heap_space_size_total_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_heap_space_size_total_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Heap Total - {{instance}} - {{space}}",
@@ -939,7 +941,7 @@
                         "type": "prometheus",
                         "uid": "aey5yqbb30j5se"
                     },
-                    "expr": "nodejs_heap_space_size_used_bytes{instance=~\"$instance\"}",
+                    "expr": "nodejs_heap_space_size_used_bytes{instance=~\"$instance|.*\"}",
                     "format": "time_series",
                     "intervalFactor": 1,
                     "legendFormat": "Heap Used - {{instance}} - {{space}}",
@@ -958,7 +960,7 @@
         "list": [
             {
                 "current": {
-                    "text": ["All"],
+                    "text": "All",
                     "value": ["$__all"]
                 },
                 "datasource": "aey5yqbb30j5se",
@@ -977,12 +979,12 @@
         ]
     },
     "time": {
-        "from": "now-1h",
+        "from": "now-15m",
         "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "NodeJS Application Dashboard",
     "uid": "PTSqcpJWk",
-    "version": 6
+    "version": 7
 }
